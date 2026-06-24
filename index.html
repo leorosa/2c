@@ -55,7 +55,7 @@
                 newVal = false
                 document.getElementById('display').value = ''
             } else {
-// PV = PMT * ((1+i)^n-1) / (i*(1+i)^n)
+// PV = (FV - PMT * ((1+i)^n-1) / i )  /  (1+i)^n
                 PV = (FV - PMT * (Math.pow(1+i,n)-1)/i) / Math.pow(1+i,n)
                 document.getElementById('display').value = PV
                 console.log(PV)
@@ -66,6 +66,11 @@
                 PMT = Number(document.getElementById('display').value)
                 newVal = false
                 document.getElementById('display').value = ''
+            } else {
+// PMT = (FV - PV * (1+i)^n) / (((1+i)^n-1) / i)
+                PMT = (FV - PV*Math.pow(1+i,n)) / ((Math.pow(1+i,n)-1)/i)
+                document.getElementById('display').value = PMT
+                console.log(PMT)
             }
         }
         function setFV() {

@@ -52,6 +52,10 @@
                 i = Number(document.getElementById('display').value)/100
                 newVal = false
                 document.getElementById('display').value = ''
+            } else {
+// implement a numerical method to estimate i
+                document.getElementById('display').value = 100*i
+                console.log(i)
             }
         }
         function setPV() {

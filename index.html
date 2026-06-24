@@ -54,6 +54,11 @@
                 PV = Number(document.getElementById('display').value)
                 newVal = false
                 document.getElementById('display').value = ''
+            } else {
+// PV = PMT * ((1+i)^n-1) / (i*(1+i)^n)
+                PV = (FV - PMT * (Math.pow(1+i,n)-1)/i) / Math.pow(1+i,n)
+                document.getElementById('display').value = PV
+                console.log(PV)
             }
         }
         function setPMT() {

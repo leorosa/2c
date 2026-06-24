@@ -7,7 +7,7 @@
     <title>2C</title>
 </head>
 <body>
-    <input type='text' id='display'></input><br>
+    <input type='number' step='any' id='display'></input><br>
     <div id='buttons'>
         <button id='n' onclick='setN()'>n</button>
         <button id='i' onclick='setI()'>i</button>
@@ -37,37 +37,42 @@
         }
         function setN() {
             if (newVal) {
-                n = document.getElementById('display').value
+                n = Number(document.getElementById('display').value)
                 newVal = false
                 document.getElementById('display').value = ''
             }
         }
         function setI() {
             if (newVal) {
-                i = document.getElementById('display').value
+                i = Number(document.getElementById('display').value)/100
                 newVal = false
                 document.getElementById('display').value = ''
             }
         }
         function setPV() {
             if (newVal) {
-                PV = document.getElementById('display').value
+                PV = Number(document.getElementById('display').value)
                 newVal = false
                 document.getElementById('display').value = ''
             }
         }
         function setPMT() {
             if (newVal) {
-                PMT = document.getElementById('display').value
+                PMT = Number(document.getElementById('display').value)
                 newVal = false
                 document.getElementById('display').value = ''
             }
         }
         function setFV() {
             if (newVal) {
-                FV = document.getElementById('display').value
+                FV = Number(document.getElementById('display').value)
                 newVal = false
                 document.getElementById('display').value = ''
+            } else {
+// FV = PV * (1+i)^n  +  PMT * ((1+i)^n-1) / i
+                FV = PV * Math.pow(1+i,n)  +  PMT * (Math.pow(1+i,n)-1)/i
+                document.getElementById('display').value = FV
+                console.log(FV)
             }
         }
         function CHS() {

@@ -40,6 +40,11 @@
                 n = Number(document.getElementById('display').value)
                 newVal = false
                 document.getElementById('display').value = ''
+            } else {
+// n = log( (PMT+i*FV)/(PMT-PV) ) / log(1+i)
+                n = Math.log( (PMT+i*FV)/(PMT-PV) ) / Math.log(1+i)
+                document.getElementById('display').value = n
+                console.log(n)
             }
         }
         function setI() {

@@ -17,5 +17,23 @@
         <button id='CHS'>CHS</button>
     </div>
     <br><button id='clear'>clear</button>
+    <script>
+        var newVal = false
+        var n = 0
+        var i = 0
+        var PV = 0
+        var PMT = 0
+        var FV = 0
+        document.getElementById('display').onclick = function () { newVal = true }
+        document.getElementById('clear').onclick = function () {
+            console.log(newVal)
+            newVal = false
+            n = 0
+            i = 0
+            PV = 0
+            PMT = 0
+            FV = 0
+        }
+    </script>
 </body>
 </html>

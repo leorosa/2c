@@ -4,7 +4,7 @@
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta name='description' content='2C: A minimal financial calculator.'>
-    <title>2C</title>
+    <title>Essencial HP 12C</title>
 </head>
 <body>
     <input type='number' step='any' id='display'></input><br>
@@ -36,7 +36,7 @@
             PV = 0
             PMT = 0
             FV = 0
-            document.getElementById('display').value = ''
+            document.getElementById('display').value = '0'
         }
         function setN() {
             if (newVal) {
@@ -55,12 +55,25 @@
                 i = Number(document.getElementById('display').value)/100
                 newVal = false
             } else {
-// Linear Iteractive Method:
+// Linear Iteractive Method: -> does not converge
 //  i = (PMT * ((1+i)^n-1)) / (FV - PV * (1+i)^n)
-                var iOld = 1
-                while (Math.abs(iOld-i)>0.01) {
-                    i = (PMT*(Math.pow(1+i,n)-1)) / (FV - PV*Math.pow(1+i,n))
+// Regula Falsi Method (better than bisect)
+                var i1 = 0.000001
+                var i2 = 10
+                var i = (i1+i2)/2
+                res1 = FV + PV*Math.pow(1+i1,n) + PMT*(Math.pow(1+i1,n)-1)/i1
+                res2 = FV + PV*Math.pow(1+i2,n) + PMT*(Math.pow(1+i2,n)-1)/i2
+                while (Math.abs(i1-i2)>0.001) {
+                    res = FV + PV*Math.pow(1+i,n) + PMT*(Math.pow(1+i,n)-1)/i
+                    i = (i1*res2-i2*res1)/(res2+res1)
                     console.log(i)
+                    if (res*res1>0) {
+                        i1 = i
+                        res1 = res
+                    } else {
+                        i2 = i
+                        res2 = res
+                    }
                 }
                 document.getElementById('display').value = 100*i
             }
@@ -72,7 +85,7 @@
                 newVal = false
             } else {
 // PV = (FV - PMT * ((1+i)^n-1) / i )  /  (1+i)^n
-                PV = (FV - PMT * (Math.pow(1+i,n)-1)/i) / Math.pow(1+i,n)
+                PV = (FV + PMT * (Math.pow(1+i,n)-1)/i) / Math.pow(1+i,n)
                 console.log(PV)
             }
             document.getElementById('display').value = (PV).toLocaleString(undefined)
@@ -83,7 +96,7 @@
                 newVal = false
             } else {
 // PMT = (FV - PV * (1+i)^n) / (((1+i)^n-1) / i)
-                PMT = (FV - PV*Math.pow(1+i,n)) / ((Math.pow(1+i,n)-1)/i)
+                PMT = (FV + PV*Math.pow(1+i,n)) / ((Math.pow(1+i,n)-1)/i)
                 document.getElementById('display').value = PMT
                 console.log(PMT)
             }
@@ -95,7 +108,7 @@
                 newVal = false
             } else {
 // FV = PV * (1+i)^n  +  PMT * ((1+i)^n-1) / i
-                FV = PV * Math.pow(1+i,n)  +  PMT * (Math.pow(1+i,n)-1)/i
+                FV = -(PV * Math.pow(1+i,n)  +  PMT * (Math.pow(1+i,n)-1)/i)
                 document.getElementById('display').value = FV
                 console.log(FV)
             }

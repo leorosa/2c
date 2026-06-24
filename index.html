@@ -53,9 +53,14 @@
                 newVal = false
                 document.getElementById('display').value = ''
             } else {
-// implement a numerical method to estimate i
+// Linear Iteractive Method:
+//  i = (PMT * ((1+i)^n-1)) / (FV - PV * (1+i)^n)
+                var iOld = 1
+                while (Math.abs(iOld-i)>0.01) {
+                    i = (PMT*(Math.pow(1+i,n)-1)) / (FV - PV*Math.pow(1+i,n))
+                    console.log(i)
+                }
                 document.getElementById('display').value = 100*i
-                console.log(i)
             }
         }
         function setPV() {

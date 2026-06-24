@@ -9,14 +9,14 @@
 <body>
     <input type='text' id='display'></input><br>
     <div id='buttons'>
-        <button id='n'>n</button>
-        <button id='i'>i</button>
-        <button id='PV'>PV</button>
-        <button id='PMT'>PMT</button>
-        <button id='FV'>FV</button>
-        <button id='CHS'>CHS</button>
+        <button id='n' onclick='setN()'>n</button>
+        <button id='i' onclick='setI()'>i</button>
+        <button id='PV' onclick='setPV()'>PV</button>
+        <button id='PMT' onclick='setPMT()'>PMT</button>
+        <button id='FV' onclick='setFV()'>FV</button>
+        <button id='CHS' onclick='CHS()'>CHS</button>
     </div>
-    <br><button id='clear'>clear</button>
+    <br><button id='clear' onclick='clearVals()'>clear</button>
     <script>
         var newVal = false
         var n = 0
@@ -25,7 +25,7 @@
         var PMT = 0
         var FV = 0
         document.getElementById('display').onclick = function () { newVal = true }
-        document.getElementById('clear').onclick = function () {
+        function clearVals() {
             console.log(newVal)
             newVal = false
             n = 0
@@ -33,6 +33,48 @@
             PV = 0
             PMT = 0
             FV = 0
+            document.getElementById('display').value = ''
+        }
+        function setN() {
+            if (newVal) {
+                n = document.getElementById('display').value
+                newVal = false
+                document.getElementById('display').value = ''
+            }
+        }
+        function setI() {
+            if (newVal) {
+                i = document.getElementById('display').value
+                newVal = false
+                document.getElementById('display').value = ''
+            }
+        }
+        function setPV() {
+            if (newVal) {
+                PV = document.getElementById('display').value
+                newVal = false
+                document.getElementById('display').value = ''
+            }
+        }
+        function setPMT() {
+            if (newVal) {
+                PMT = document.getElementById('display').value
+                newVal = false
+                document.getElementById('display').value = ''
+            }
+        }
+        function setFV() {
+            if (newVal) {
+                FV = document.getElementById('display').value
+                newVal = false
+                document.getElementById('display').value = ''
+            }
+        }
+        function CHS() {
+            if (newVal) {
+                var val = document.getElementById('display').value
+                document.getElementById('display').value = -1*Number(val)
+            }
         }
     </script>
 </body>

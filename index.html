@@ -29,7 +29,6 @@
             newVal = true
         }
         function clearVals() {
-            console.log(newVal)
             newVal = false
             n = 0
             i = 0
@@ -48,7 +47,7 @@
                 document.getElementById('display').value = n
                 console.log(n)
             }
-            document.getElementById('display').value = (n).toLocaleString(undefined)
+            document.getElementById('display').value = n.toFixed(2)
         }
         function setI() {
             if (newVal) {
@@ -66,7 +65,7 @@
                 while (Math.abs(i1-i2)>0.001) {
                     res = FV + PV*Math.pow(1+i,n) + PMT*(Math.pow(1+i,n)-1)/i
                     i = (i1*res2-i2*res1)/(res2+res1)
-                    console.log(i)
+                    console.log(100*i)
                     if (res*res1>0) {
                         i1 = i
                         res1 = res
@@ -75,9 +74,8 @@
                         res2 = res
                     }
                 }
-                document.getElementById('display').value = 100*i
             }
-            document.getElementById('display').value = (i).toLocaleString(undefined)
+            document.getElementById('display').value = (100*i).toFixed(2)
         }
         function setPV() {
             if (newVal) {
@@ -88,7 +86,7 @@
                 PV = (FV + PMT * (Math.pow(1+i,n)-1)/i) / Math.pow(1+i,n)
                 console.log(PV)
             }
-            document.getElementById('display').value = (PV).toLocaleString(undefined)
+            document.getElementById('display').value = PV.toFixed(2)
         }
         function setPMT() {
             if (newVal) {
@@ -100,7 +98,7 @@
                 document.getElementById('display').value = PMT
                 console.log(PMT)
             }
-            document.getElementById('display').value = (PMT).toLocaleString(undefined)
+            document.getElementById('display').value = PMT.toFixed(2)
         }
         function setFV() {
             if (newVal) {
@@ -112,7 +110,7 @@
                 document.getElementById('display').value = FV
                 console.log(FV)
             }
-            document.getElementById('display').value = (FV).toLocaleString(undefined)
+            document.getElementById('display').value = FV.toFixed(2)
         }
         function CHS() {
             if (newVal) {

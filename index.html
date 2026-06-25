@@ -56,6 +56,7 @@
     </div>
     <br><button id='clear' onclick='clearVals()'>clear</button>
     <script>
+        var vars = { n:0, i:0, PV:0, PMT:0, FV:0 }
         var newVal = false
         var n = 0
         var i = 0
@@ -74,6 +75,11 @@
             PV = 0
             PMT = 0
             FV = 0
+            vars.n = 0
+            vars.i = 0
+            vars.PV = 0
+            vars.PMT = 0
+            vars.FV = 0
             document.getElementById('n').title = 0
             document.getElementById('i').title = 0
             document.getElementById('PV').title = 0
@@ -89,20 +95,20 @@
         }
         function setN() {
             if (newVal) {
-                n = Number(document.getElementById('display').value)
+                vars.n = Number(document.getElementById('display').value)
                 newVal = false
             } else {
 // n = log( (PMT+i*FV)/(PMT-PV) ) / log(1+i)
-                n = Math.log( (PMT+i*FV)/(PMT-PV) ) / Math.log(1+i)
-                console.log(n)
+                vars.n = Math.log( (vars.PMT+vars.i*vars.FV)/(vars.PMT-vars.PV) ) / Math.log(1+vars.i)
+                console.log(vars.n)
             }
-            document.getElementById('display').value = n.toFixed(2)
-            document.getElementById('n').title = n
+            document.getElementById('display').value = vars.n.toFixed(2)
+            document.getElementById('n').title = vars.n
             document.getElementById('n').style.background = '#0005'
         }
         function setI() {
             if (newVal) {
-                i = Number(document.getElementById('display').value)/100
+                vars.i = Number(document.getElementById('display').value)/100
                 newVal = false
             } else {
 // Linear Iteractive Method: -> does not converge
@@ -111,62 +117,62 @@
                 var i1 = 0.000001
                 var i2 = 10
                 i = (i1+i2)/2
-                res1 = FV + PV*Math.pow(1+i1,n) + PMT*(Math.pow(1+i1,n)-1)/i1
-                res2 = FV + PV*Math.pow(1+i2,n) + PMT*(Math.pow(1+i2,n)-1)/i2
+                res1 = vars.FV + vars.PV*Math.pow(1+i1,vars.n) + vars.PMT*(Math.pow(1+i1,vars.n)-1)/i1
+                res2 = vars.FV + vars.PV*Math.pow(1+i2,vars.n) + vars.PMT*(Math.pow(1+i2,vars.n)-1)/i2
                 while (Math.abs(i1-i2)>0.001) {
-                    res = FV + PV*Math.pow(1+i,n) + PMT*(Math.pow(1+i,n)-1)/i
-                    i = (i1*res2-i2*res1)/(res2+res1)
+                    res = vars.FV + vars.PV*Math.pow(1+vars.i,vars.n) + vars.PMT*(Math.pow(1+vars.i,vars.n)-1)/vars.i
+                    vars.i = (i1*res2-i2*res1)/(res2+res1)
                     console.log(100*i)
                     if (res*res1>0) {
-                        i1 = i
+                        i1 = vars.i
                         res1 = res
                     } else {
-                        i2 = i
+                        i2 = vars.i
                         res2 = res
                     }
                 }
             }
-            document.getElementById('display').value = (100*i).toFixed(2)
-            document.getElementById('i').title = i
+            document.getElementById('display').value = (100*vars.i).toFixed(2)
+            document.getElementById('i').title = vars.i
             document.getElementById('i').style.background = '#0005'
         }
         function setPV() {
             if (newVal) {
-                PV = Number(document.getElementById('display').value)
+                vars.PV = Number(document.getElementById('display').value)
                 newVal = false
             } else {
 // PV = (FV - PMT * ((1+i)^n-1) / i )  /  (1+i)^n
-                PV = (FV + PMT * (Math.pow(1+i,n)-1)/i) / Math.pow(1+i,n)
-                console.log(PV)
+                vars.PV = (vars.FV + vars.PMT * (Math.pow(1+vars.i,vars.n)-1)/vars.i) / Math.pow(1+vars.i,vars.n)
+                console.log(vars.PV)
             }
-            document.getElementById('display').value = PV.toFixed(2)
-            document.getElementById('PV').title = PV
+            document.getElementById('display').value = vars.PV.toFixed(2)
+            document.getElementById('PV').title = vars.PV
             document.getElementById('PV').style.background = '#0005'
         }
         function setPMT() {
             if (newVal) {
-                PMT = Number(document.getElementById('display').value)
+                vars.PMT = Number(document.getElementById('display').value)
                 newVal = false
             } else {
 // PMT = (FV - PV * (1+i)^n) / (((1+i)^n-1) / i)
-                PMT = (FV + PV*Math.pow(1+i,n)) / ((Math.pow(1+i,n)-1)/i)
-                console.log(PMT)
+                vars.PMT = (vars.FV + vars.PV*Math.pow(1+vars.i,vars.n)) / ((Math.pow(1+vars.i,vars.n)-1)/vars.i)
+                console.log(vars.PMT)
             }
-            document.getElementById('display').value = PMT.toFixed(2)
-            document.getElementById('PMT').title = PMT
+            document.getElementById('display').value = vars.PMT.toFixed(2)
+            document.getElementById('PMT').title = vars.PMT
             document.getElementById('PMT').style.background = '#0005'
         }
         function setFV() {
             if (newVal) {
-                FV = Number(document.getElementById('display').value)
+                vars.FV = Number(document.getElementById('display').value)
                 newVal = false
             } else {
 // FV = PV * (1+i)^n  +  PMT * ((1+i)^n-1) / i
-                FV = -(PV * Math.pow(1+i,n)  +  PMT * (Math.pow(1+i,n)-1)/i)
-                console.log(FV)
+                vars.FV = -(vars.PV * Math.pow(1+vars.i,vars.n)  +  vars.PMT * (Math.pow(1+vars.i,vars.n)-1)/vars.i)
+                console.log(vars.FV)
             }
-            document.getElementById('display').value = FV.toFixed(2)
-            document.getElementById('FV').title = FV
+            document.getElementById('display').value = vars.FV.toFixed(2)
+            document.getElementById('FV').title = vars.FV
             document.getElementById('FV').style.background = '#0005'
         }
         function CHS() {

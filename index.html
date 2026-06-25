@@ -7,13 +7,44 @@
     <title>Essencial HP 12C</title>
     <link href="https://fonts.cdnfonts.com/css/seven-segment" rel="stylesheet">
     <style>
-        input {
+        #display {
+            position: relative;
+            left: -620px;
+            top: -413px;
+            background: #0000;
             text-align: right;
+            font-size: 36pt;
+            font-weight: bold;
+/*          font-style: italic; */
+            letter-spacing: 8px;
+            border: none;
+            outline: none;
             font-family: 'Seven Segment';
+            width: 300px;
+        }
+        button {
+            background: #0000;
+            color: #0000;
+            border: none;
+            position: relative;
+            top: -330px;
+            width: 50px;
+            height: 45px;
+        }
+        #n { left: 55px; }
+        #i { left: 73px; }
+        #PV { left: 91px; }
+        #PMT { left: 109px; }
+        #FV { left: 127px; }
+        #CHS { left: 145px; }
+        #clear {
+            top: -240px;
+            left: 340px;
         }
     </style>
 </head>
 <body>
+    <img src='hp12c_platinum.jpg'>
     <input type='number' step='any' id='display'></input><br>
     <div id='buttons'>
         <button id='n' onclick='setN()'>n</button>

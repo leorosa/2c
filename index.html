@@ -80,6 +80,12 @@
             document.getElementById('PMT').title = 0
             document.getElementById('FV').title = 0
             document.getElementById('display').value = '0'
+            document.getElementById('n').style.background = '#0000'
+            document.getElementById('i').style.background = '#0000'
+            document.getElementById('PV').style.background = '#0000'
+            document.getElementById('PMT').style.background = '#0000'
+            document.getElementById('FV').style.background = '#0000'
+            document.getElementById('display').style.background = '#0000'
         }
         function setN() {
             if (newVal) {
@@ -88,11 +94,11 @@
             } else {
 // n = log( (PMT+i*FV)/(PMT-PV) ) / log(1+i)
                 n = Math.log( (PMT+i*FV)/(PMT-PV) ) / Math.log(1+i)
-                document.getElementById('display').value = n
                 console.log(n)
             }
             document.getElementById('display').value = n.toFixed(2)
             document.getElementById('n').title = n
+            document.getElementById('n').style.background = '#0005'
         }
         function setI() {
             if (newVal) {
@@ -122,6 +128,7 @@
             }
             document.getElementById('display').value = (100*i).toFixed(2)
             document.getElementById('i').title = i
+            document.getElementById('i').style.background = '#0005'
         }
         function setPV() {
             if (newVal) {
@@ -134,6 +141,7 @@
             }
             document.getElementById('display').value = PV.toFixed(2)
             document.getElementById('PV').title = PV
+            document.getElementById('PV').style.background = '#0005'
         }
         function setPMT() {
             if (newVal) {
@@ -142,11 +150,11 @@
             } else {
 // PMT = (FV - PV * (1+i)^n) / (((1+i)^n-1) / i)
                 PMT = (FV + PV*Math.pow(1+i,n)) / ((Math.pow(1+i,n)-1)/i)
-                document.getElementById('display').value = PMT
                 console.log(PMT)
             }
             document.getElementById('display').value = PMT.toFixed(2)
             document.getElementById('PMT').title = PMT
+            document.getElementById('PMT').style.background = '#0005'
         }
         function setFV() {
             if (newVal) {
@@ -155,11 +163,11 @@
             } else {
 // FV = PV * (1+i)^n  +  PMT * ((1+i)^n-1) / i
                 FV = -(PV * Math.pow(1+i,n)  +  PMT * (Math.pow(1+i,n)-1)/i)
-                document.getElementById('display').value = FV
                 console.log(FV)
             }
             document.getElementById('display').value = FV.toFixed(2)
             document.getElementById('FV').title = FV
+            document.getElementById('FV').style.background = '#0005'
         }
         function CHS() {
             if (newVal) {

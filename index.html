@@ -74,6 +74,11 @@
             PV = 0
             PMT = 0
             FV = 0
+            document.getElementById('n').title = 0
+            document.getElementById('i').title = 0
+            document.getElementById('PV').title = 0
+            document.getElementById('PMT').title = 0
+            document.getElementById('FV').title = 0
             document.getElementById('display').value = '0'
         }
         function setN() {
@@ -86,7 +91,8 @@
                 document.getElementById('display').value = n
                 console.log(n)
             }
-            document.getElementById('display').value = (n).toLocaleString(undefined)
+            document.getElementById('display').value = n.toFixed(2)
+            document.getElementById('n').title = n
         }
         function setI() {
             if (newVal) {
@@ -113,9 +119,9 @@
                         res2 = res
                     }
                 }
-                document.getElementById('display').value = 100*i
             }
-            document.getElementById('display').value = (i).toLocaleString(undefined)
+            document.getElementById('display').value = (100*i).toFixed(2)
+            document.getElementById('i').title = i
         }
         function setPV() {
             if (newVal) {
@@ -126,7 +132,8 @@
                 PV = (FV + PMT * (Math.pow(1+i,n)-1)/i) / Math.pow(1+i,n)
                 console.log(PV)
             }
-            document.getElementById('display').value = (PV).toLocaleString(undefined)
+            document.getElementById('display').value = PV.toFixed(2)
+            document.getElementById('PV').title = PV
         }
         function setPMT() {
             if (newVal) {
@@ -138,7 +145,8 @@
                 document.getElementById('display').value = PMT
                 console.log(PMT)
             }
-            document.getElementById('display').value = (PMT).toLocaleString(undefined)
+            document.getElementById('display').value = PMT.toFixed(2)
+            document.getElementById('PMT').title = PMT
         }
         function setFV() {
             if (newVal) {
@@ -150,7 +158,8 @@
                 document.getElementById('display').value = FV
                 console.log(FV)
             }
-            document.getElementById('display').value = (FV).toLocaleString(undefined)
+            document.getElementById('display').value = FV.toFixed(2)
+            document.getElementById('FV').title = FV
         }
         function CHS() {
             if (newVal) {

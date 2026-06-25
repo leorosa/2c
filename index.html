@@ -104,7 +104,7 @@
 // Regula Falsi Method (better than bisect)
                 var i1 = 0.000001
                 var i2 = 10
-                var i = (i1+i2)/2
+                i = (i1+i2)/2
                 res1 = FV + PV*Math.pow(1+i1,n) + PMT*(Math.pow(1+i1,n)-1)/i1
                 res2 = FV + PV*Math.pow(1+i2,n) + PMT*(Math.pow(1+i2,n)-1)/i2
                 while (Math.abs(i1-i2)>0.001) {

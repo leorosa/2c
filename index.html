@@ -7,127 +7,276 @@
     <title>Essencial HP 12c</title>
     <link href="https://fonts.cdnfonts.com/css/seven-segment" rel="stylesheet">
     <style>
-        #display {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #333;
+            font-family: 'Seven Segment', monospace;
+            padding: 20px;
+        }
+
+        .calculator-wrapper {
             position: relative;
-            left: -620px;
-            top: -413px;
-            background: #0000;
+            display: inline-block;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .calculator-wrapper img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #display {
+            position: absolute;
+            top: 41.5%;
+            left: 33%;
+            width: 35%;
+            height: 8%;
+            
+            background: transparent;
+            color: #000;
             text-align: right;
-            font-size: 36pt;
+            font-size: clamp(16px, 3vw, 32px);
             font-weight: bold;
-/*          font-style: italic; */
-            letter-spacing: 8px;
+            letter-spacing: 0.15em;
             border: none;
             outline: none;
-            font-family: 'Seven Segment';
-            width: 300px;
+            font-family: 'Seven Segment', monospace;
+            padding-right: 2%;
         }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
-            }
+        }
+
         input[type=number] {
             -moz-appearance: textfield;
         }
-        button {
-            background: #0000;
-            color: #0000;
-            border: none;
-            position: relative;
-            top: -330px;
-            width: 50px;
-            height: 45px;
+
+        .button-group {
+            position: absolute;
+            display: flex;
+            gap: 1.5%;
+            width: 32%;
+            height: 6%;
+            top: 53%;
+            left: 52.5%;
+            transform: translateX(-50%);
         }
-        #n { left: 55px; }
-        #i { left: 73px; }
-        #PV { left: 91px; }
-        #PMT { left: 109px; }
-        #FV { left: 127px; }
-        #CHS { left: 145px; }
+
+        button {
+            flex: 1;
+            background: transparent;
+            color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0;
+            transition: background 0.1s;
+        }
+
+        button:active {
+            background: rgba(0, 0, 0, 0.15);
+        }
+
         #clear {
-            top: -240px;
-            left: 340px;
+            position: absolute;
+            top: 23%;
+            left: 84.5%;
+            width: 4.5%;
+            height: 5%;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        #clear:active {
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .calculator-wrapper {
+                max-width: 100vw;
+            }
         }
     </style>
 </head>
 <body>
-    <img src='hp12c_platinum.jpg'>
-    <input type='number' step='any' id='display'></input><br>
-    <div id='buttons'>
-        <button id='n' onclick='setVar("n")'>n</button>
-        <button id='i' onclick='setVar("i")'>i</button>
-        <button id='PV' onclick='setVar("PV")'>PV</button>
-        <button id='PMT' onclick='setVar("PMT")'>PMT</button>
-        <button id='FV' onclick='setVar("FV")'>FV</button>
-        <button id='CHS' onclick='CHS()'>CHS</button>
+    <div class="calculator-wrapper">
+        <img src='hp12c_platinum.jpg' alt='HP 12c Calculator'>
+        <div class="overlay">
+            <input type='number' step='any' id='display' value='0'>
+            <div class="button-group">
+                <button id='n' onclick='calc.setVar("n")' title='n'></button>
+                <button id='i' onclick='calc.setVar("i")' title='i'></button>
+                <button id='PV' onclick='calc.setVar("PV")' title='PV'></button>
+                <button id='PMT' onclick='calc.setVar("PMT")' title='PMT'></button>
+                <button id='FV' onclick='calc.setVar("FV")' title='FV'></button>
+                <button id='CHS' onclick='calc.changeSign()' title='CHS'></button>
+            </div>
+            <button id='clear' onclick='calc.reset()' title='Clear'></button>
+        </div>
     </div>
-    <br><button id='clear' onclick='clearVals()'>clear</button>
+
     <script>
-        var vars = { n:0, i:0, PV:0, PMT:0, FV:0 }
-        var newVal = false
-        document.getElementById('display').value = '0'
-        document.getElementById('display').onclick = function () {
-            document.getElementById('display').value = ''
-            newVal = true
-        }
-        function clearVals() {
-            newVal = false
-            document.getElementById('display').value = '0'
-            document.getElementById('display').style.background = '#0000'
-            for (let key of Object.keys(vars)) {
-                vars[key] = 0
-                document.getElementById(key).title = 0
-                document.getElementById(key).style.background = '#0000'
+        class FinancialCalculator {
+            #state = {
+                n: 0,
+                i: 0,
+                PV: 0,
+                PMT: 0,
+                FV: 0,
+                newVal: false
+            };
+
+            #displayEl = document.getElementById('display');
+            #varKeys = ['n', 'i', 'PV', 'PMT', 'FV'];
+
+            constructor() {
+                this.#displayEl.addEventListener('click', () => this.#onDisplayClick());
             }
-        }
-        function setVar(key) {
-            if (newVal) {
-                vars[key] = Number(document.getElementById('display').value)
-                if (key=='i')
-                    vars[key] /= 100
-                newVal = false
-            } else {
-                if (key=='n') // n = log( (PMT+i*FV)/(PMT-PV) ) / log(1+i)
-                    vars.n = Math.log( (vars.PMT+vars.i*vars.FV)/(vars.PMT-vars.PV) ) / Math.log(1+vars.i)
-                else if (key=='i')
-                    vars.i = setI()
-                else if (key=='PV') // PV = (FV - PMT * ((1+i)^n-1) / i )  /  (1+i)^n
-                    vars.PV = -(vars.FV + vars.PMT * (Math.pow(1+vars.i,vars.n)-1)/vars.i) / Math.pow(1+vars.i,vars.n)
-                else if (key=='PMT') // PMT = (FV - PV * (1+i)^n) / (((1+i)^n-1) / i)
-                    vars.PMT = -(vars.FV + vars.PV*Math.pow(1+vars.i,vars.n)) / ((Math.pow(1+vars.i,vars.n)-1)/vars.i)
-                else if (key=='FV') // FV = PV * (1+i)^n  +  PMT * ((1+i)^n-1) / i
-                    vars.FV = -(vars.PV * Math.pow(1+vars.i,vars.n)  +  vars.PMT * (Math.pow(1+vars.i,vars.n)-1)/vars.i)
-                console.log(vars[key])
+
+            #onDisplayClick() {
+                this.#displayEl.value = '';
+                this.#state.newVal = true;
             }
-            if (key=='i')
-                document.getElementById('display').value = (100*vars.i).toFixed(2)
-            else
-                document.getElementById('display').value = vars[key].toFixed(2)
-            document.getElementById(key).title = vars[key]
-            document.getElementById(key).style.background = '#0005'
-        }
-        function setI() {
-// Linear Iteractive Method: -> does not converge
-//  i = (PMT * ((1+i)^n-1)) / (FV - PV * (1+i)^n)
-// Regula Falsi Method (better than bisect)
-                var i1 = 0.000001
-                var i2 = 10
-                vars.i = (i1+i2)/2
-                res1 = vars.FV + vars.PV*Math.pow(1+i1,vars.n) + vars.PMT*(Math.pow(1+i1,vars.n)-1)/i1
-                res2 = vars.FV + vars.PV*Math.pow(1+i2,vars.n) + vars.PMT*(Math.pow(1+i2,vars.n)-1)/i2
-                while (Math.abs(i1-i2)>0.001) {
-                    res = vars.FV + vars.PV*Math.pow(1+vars.i,vars.n) + vars.PMT*(Math.pow(1+vars.i,vars.n)-1)/vars.i
-                    vars.i = (i1*res2-i2*res1)/(res2+res1)
-                    console.log(100*vars.i)
-                    if (res*res1>0) {
-                        i1 = vars.i
-                        res1 = res
+
+            setVar(key) {
+                if (this.#state.newVal) {
+                    this.#state[key] = Number(this.#displayEl.value);
+                    if (key === 'i') {
+                        this.#state[key] /= 100;
+                    }
+                    this.#state.newVal = false;
+                } else {
+                    this.#calculate(key);
+                }
+
+                this.#updateDisplay(key);
+            }
+
+            #calculate(key) {
+                if (key === 'n') {
+                    // n = log((PMT + i*FV) / (PMT - PV)) / log(1 + i)
+                    this.#state.n = Math.log(
+                        (this.#state.PMT + this.#state.i * this.#state.FV) /
+                        (this.#state.PMT - this.#state.PV)
+                    ) / Math.log(1 + this.#state.i);
+                } else if (key === 'i') {
+                    this.#state.i = this.#solveForI();
+                } else if (key === 'PV') {
+                    // PV = -(FV + PMT * ((1+i)^n - 1) / i) / (1+i)^n
+                    const factor = Math.pow(1 + this.#state.i, this.#state.n);
+                    this.#state.PV = -(this.#state.FV + this.#state.PMT * (factor - 1) / this.#state.i) / factor;
+                } else if (key === 'PMT') {
+                    // PMT = -(FV + PV * (1+i)^n) / ((1+i)^n - 1) / i
+                    const factor = Math.pow(1 + this.#state.i, this.#state.n);
+                    this.#state.PMT = -(this.#state.FV + this.#state.PV * factor) / ((factor - 1) / this.#state.i);
+                } else if (key === 'FV') {
+                    // FV = -(PV * (1+i)^n + PMT * ((1+i)^n - 1) / i)
+                    const factor = Math.pow(1 + this.#state.i, this.#state.n);
+                    this.#state.FV = -(this.#state.PV * factor + this.#state.PMT * (factor - 1) / this.#state.i);
+                }
+
+                console.log(`${key}: ${this.#state[key]}`);
+            }
+
+            #solveForI() {
+                // Regula Falsi Method (False Position)
+                let i1 = 0.000001;
+                let i2 = 10;
+                let iMid = (i1 + i2) / 2;
+
+                const residual = (i) => 
+                    this.#state.FV + 
+                    this.#state.PV * Math.pow(1 + i, this.#state.n) + 
+                    this.#state.PMT * (Math.pow(1 + i, this.#state.n) - 1) / i;
+
+                let res1 = residual(i1);
+                let res2 = residual(i2);
+
+                while (Math.abs(i1 - i2) > 0.001) {
+                    let resMid = residual(iMid);
+                    iMid = (i1 * res2 - i2 * res1) / (res2 - res1);
+                    console.log(`i iteration: ${(100 * iMid).toFixed(2)}%`);
+
+                    if (resMid * res1 > 0) {
+                        i1 = iMid;
+                        res1 = resMid;
                     } else {
-                        i2 = vars.i
-                        res2 = res
+                        i2 = iMid;
+                        res2 = resMid;
                     }
                 }
+
+                return iMid;
+            }
+
+            #updateDisplay(key) {
+                if (key === 'i') {
+                    this.#displayEl.value = (100 * this.#state.i).toFixed(2);
+                } else {
+                    this.#displayEl.value = this.#state[key].toFixed(2);
+                }
+
+                const btn = document.getElementById(key);
+                btn.classList.add('active');
+                btn.title = `${key}: ${this.#state[key].toFixed(2)}`;
+            }
+
+            changeSign() {
+                this.#state.n = -this.#state.n;
+                this.#displayEl.value = this.#state.n.toFixed(2);
+                const btn = document.getElementById('CHS');
+                btn.classList.add('active');
+            }
+
+            reset() {
+                this.#state = {
+                    n: 0,
+                    i: 0,
+                    PV: 0,
+                    PMT: 0,
+                    FV: 0,
+                    newVal: false
+                };
+                this.#displayEl.value = '0';
+                this.#displayEl.style.background = 'transparent';
+                
+                this.#varKeys.forEach(key => {
+                    const btn = document.getElementById(key);
+                    btn.classList.remove('active');
+                    btn.title = key + ': 0';
+                });
+            }
         }
+
+        // Initialize calculator
+        const calc = new FinancialCalculator();
     </script>
 </body>
 </html>

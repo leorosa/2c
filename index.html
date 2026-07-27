@@ -92,9 +92,9 @@
                 else if (key=='i')
                     vars.i = setI()
                 else if (key=='PV') // PV = (FV - PMT * ((1+i)^n-1) / i )  /  (1+i)^n
-                    vars.PV = (vars.FV + vars.PMT * (Math.pow(1+vars.i,vars.n)-1)/vars.i) / Math.pow(1+vars.i,vars.n)
+                    vars.PV = -(vars.FV + vars.PMT * (Math.pow(1+vars.i,vars.n)-1)/vars.i) / Math.pow(1+vars.i,vars.n)
                 else if (key=='PMT') // PMT = (FV - PV * (1+i)^n) / (((1+i)^n-1) / i)
-                    vars.PMT = (vars.FV + vars.PV*Math.pow(1+vars.i,vars.n)) / ((Math.pow(1+vars.i,vars.n)-1)/vars.i)
+                    vars.PMT = -(vars.FV + vars.PV*Math.pow(1+vars.i,vars.n)) / ((Math.pow(1+vars.i,vars.n)-1)/vars.i)
                 else if (key=='FV') // FV = PV * (1+i)^n  +  PMT * ((1+i)^n-1) / i
                     vars.FV = -(vars.PV * Math.pow(1+vars.i,vars.n)  +  vars.PMT * (Math.pow(1+vars.i,vars.n)-1)/vars.i)
                 console.log(vars[key])
@@ -118,7 +118,7 @@
                 while (Math.abs(i1-i2)>0.001) {
                     res = vars.FV + vars.PV*Math.pow(1+vars.i,vars.n) + vars.PMT*(Math.pow(1+vars.i,vars.n)-1)/vars.i
                     vars.i = (i1*res2-i2*res1)/(res2+res1)
-                    console.log(100*i)
+                    console.log(100*vars.i)
                     if (res*res1>0) {
                         i1 = vars.i
                         res1 = res
